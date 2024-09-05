@@ -2,14 +2,20 @@
 
 <template>
   <div
-    class="min-h-screen bg-gray-50 text-gray-950 dark:bg-black dark:text-gray-50 flex flex-col relative"
+    class="bg-gray-50 text-gray-950 dark:bg-black dark:text-gray-50 flex flex-col min-h-screen"
   >
     <div class="flex flex-col">
-      <LayoutHeader />
+      <!-- <LayoutHeader /> -->
       <!-- main -->
-      <main class="flex-1 relative p-4 dark:bg-gray-900 dark:text-gray-50">
+      <main class="flex-1 relative">
         <slot />
       </main>
+
+      <!-- <footer>
+        <div class="bg-black text-white text-center py-4 relative">
+          <p>&copy; 2024 Kalamullah</p>
+        </div>
+      </footer> -->
     </div>
   </div>
 </template>

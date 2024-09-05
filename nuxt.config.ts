@@ -1,13 +1,18 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2024-04-03',
+  compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/google-fonts'],
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "@nuxtjs/google-fonts",
+    "@nuxt/icon",
+    "@vueuse/nuxt",
+  ],
   tailwindcss: {
-    cssPath: ['~/assets/css/tailwind.css', { injectPosition: "first" }],
-    configPath: 'tailwind.config',
+    cssPath: ["~/assets/css/tailwind.css", { injectPosition: "first" }],
+    configPath: "tailwind.config",
     exposeConfig: {
-      level: 2
+      level: 2,
     },
     config: {},
     viewer: false,
@@ -15,9 +20,9 @@ export default defineNuxtConfig({
   googleFonts: {
     families: {
       Quicksand: true,
-      'Open+Sans': true,
+      "Open+Sans": true,
       "Oleo Script": true,
       "IBM Plex Sans Arabic": true,
-    }
-  }
-})
+    },
+  },
+});

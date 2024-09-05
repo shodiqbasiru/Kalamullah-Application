@@ -1,10 +1,10 @@
 <script lang="ts" setup></script>
 
 <template>
-  <header class="shadow-lg px-6 py-4 text-white flex items-center">
+  <header class="shadow-lg px-8 py-6 text-white flex items-center">
     <NuxtLink
       to="/"
-      class="text-5xl font-extrabold bg-gradient-to-r from-yellow-500 via-red-500 to-orange-800 text-transparent bg-clip-text font-oleo tracking-wider"
+      class="text-5xl font-extrabold bg-gradient-to-r from-yellow-500 via-red-500 to-orange-800 text-transparent bg-clip-text font-oleo tracking-wider border-e-4 border-gray-800 pe-8"
     >
       Kalamullah
     </NuxtLink>
