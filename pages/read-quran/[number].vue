@@ -1,22 +1,13 @@
 <script lang="ts" setup>
-import type { IVerse } from "~/types/interfaces";
+const { data, verseOptions } = useSurahData();
+const {
+  data: { selectedVerse, isPaused, qori },
+  methods: { playAudio, handlePlay, handlePause, handleStop },
+} = useAudioPlayer();
 
-const route = useRoute();
-const { number } = route.params;
-const { data } = await useFetch(`/api/surah/${number}`);
-
-const selectedVerse = ref<IVerse>();
-const currentAudio = ref<HTMLMediaElement | null>(null);
-const isPaused = ref(false);
+const verse = ref();
 const el = ref<HTMLElement | null>(null);
 const gradientBarWidth = ref("0%");
-const verse = ref();
-const qori = ref("05");
-
-const verseOptions = data.value?.verses.map((v) => ({
-  label: v.verseNumber,
-  value: v.verseNumber,
-}));
 
 const qoriOptions = [
   { label: "Abdullah Al Juhany", value: "01" },
@@ -25,6 +16,27 @@ const qoriOptions = [
   { label: "Ibrahim Al Dossari", value: "04" },
   { label: "Misyari Rasyid Al Afasi", value: "05" },
 ];
+
+const updateGradientBarWidth = () => {
+  if (el.value) {
+    const scrollTop = el.value.scrollTop;
+    const scrollHeight = el.value.scrollHeight - el.value.clientHeight;
+    const scrollPercentage = (scrollTop / scrollHeight) * 100;
+    gradientBarWidth.value = `${scrollPercentage}%`;
+  }
+};
+
+watchEffect(() => {
+  if (el.value && selectedVerse.value) {
+    const verseElement = el.value.querySelector(
+      `#verse-${selectedVerse.value.verseNumber}`
+    );
+
+    if (verseElement) {
+      verseElement.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+});
 
 watch(qori, (newQori) => {
   if (selectedVerse.value) {
@@ -40,86 +52,6 @@ watch(verse, (newVerse) => {
     }
   }
 });
-
-const getNextVerse = (currentVerse: IVerse): IVerse | undefined => {
-  const currentIndex = data.value?.verses.findIndex(
-    (v) => v.verseNumber === currentVerse.verseNumber
-  );
-  if (currentIndex === undefined) return;
-  return data.value?.verses[currentIndex + 1];
-};
-
-const playAudio = (verse: IVerse) => {
-  if (qori.value) {
-    const audio = new Audio(verse.audio[qori.value]);
-    currentAudio.value = audio;
-    audio.play();
-
-    audio.onended = () => {
-      const nextVerse = getNextVerse(verse);
-      if (nextVerse) {
-        handlePlay(nextVerse);
-      } else {
-        selectedVerse.value = undefined;
-        currentAudio.value = null;
-      }
-    };
-  } else {
-    console.error("Qori value is undefined");
-  }
-};
-
-const handlePlay = (verse: IVerse) => {
-  if (currentAudio.value) {
-    currentAudio.value.pause();
-    currentAudio.value.currentTime = 0;
-  }
-  selectedVerse.value = verse;
-  playAudio(verse);
-  isPaused.value = false;
-};
-
-const handlePause = () => {
-  if (currentAudio.value) {
-    if (isPaused.value) {
-      currentAudio.value.play();
-      isPaused.value = false;
-    } else {
-      currentAudio.value.pause();
-      isPaused.value = true;
-    }
-  }
-};
-
-const handleStop = () => {
-  if (currentAudio.value) {
-    currentAudio.value.pause();
-    currentAudio.value.currentTime = 0;
-  }
-  selectedVerse.value = undefined;
-  currentAudio.value = null;
-};
-
-watchEffect(() => {
-  if (el.value && selectedVerse.value) {
-    const verseElement = el.value.querySelector(
-      `#verse-${selectedVerse.value.verseNumber}`
-    );
-
-    if (verseElement) {
-      verseElement.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  }
-});
-
-const updateGradientBarWidth = () => {
-  if (el.value) {
-    const scrollTop = el.value.scrollTop;
-    const scrollHeight = el.value.scrollHeight - el.value.clientHeight;
-    const scrollPercentage = (scrollTop / scrollHeight) * 100;
-    gradientBarWidth.value = `${scrollPercentage}%`;
-  }
-};
 
 onMounted(() => {
   if (el.value) {
