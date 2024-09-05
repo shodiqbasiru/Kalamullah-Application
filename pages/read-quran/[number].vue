@@ -1,15 +1,45 @@
 <script lang="ts" setup>
 import type { IVerse } from "~/types/interfaces";
 
+const route = useRoute();
+const { number } = route.params;
+const { data } = await useFetch(`/api/surah/${number}`);
+
 const selectedVerse = ref<IVerse>();
 const currentAudio = ref<HTMLMediaElement | null>(null);
 const isPaused = ref(false);
-const route = useRoute();
 const el = ref<HTMLElement | null>(null);
 const gradientBarWidth = ref("0%");
+const verse = ref();
+const qori = ref("05");
 
-const { number } = route.params;
-const { data } = await useFetch(`/api/surah/${number}`);
+const verseOptions = data.value?.verses.map((v) => ({
+  label: v.verseNumber,
+  value: v.verseNumber,
+}));
+
+const qoriOptions = [
+  { label: "Abdullah Al Juhany", value: "01" },
+  { label: "Abdul Muhsin Al Qosim", value: "02" },
+  { label: "Abdurrahman As Sudais", value: "03" },
+  { label: "Ibrahim Al Dossari", value: "04" },
+  { label: "Misyari Rasyid Al Afasi", value: "05" },
+];
+
+watch(qori, (newQori) => {
+  if (selectedVerse.value) {
+    playAudio(selectedVerse.value);
+  }
+});
+
+watch(verse, (newVerse) => {
+  if (newVerse) {
+    const verseElement = document.getElementById(`verse-${newVerse}`);
+    if (verseElement) {
+      verseElement.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
+});
 
 const getNextVerse = (currentVerse: IVerse): IVerse | undefined => {
   const currentIndex = data.value?.verses.findIndex(
@@ -20,19 +50,23 @@ const getNextVerse = (currentVerse: IVerse): IVerse | undefined => {
 };
 
 const playAudio = (verse: IVerse) => {
-  const audio = new Audio(verse.audio["01"]);
-  currentAudio.value = audio;
-  audio.play();
+  if (qori.value) {
+    const audio = new Audio(verse.audio[qori.value]);
+    currentAudio.value = audio;
+    audio.play();
 
-  audio.onended = () => {
-    const nextVerse = getNextVerse(verse);
-    if (nextVerse) {
-      handlePlay(nextVerse);
-    } else {
-      selectedVerse.value = undefined;
-      currentAudio.value = null;
-    }
-  };
+    audio.onended = () => {
+      const nextVerse = getNextVerse(verse);
+      if (nextVerse) {
+        handlePlay(nextVerse);
+      } else {
+        selectedVerse.value = undefined;
+        currentAudio.value = null;
+      }
+    };
+  } else {
+    console.error("Qori value is undefined");
+  }
 };
 
 const handlePlay = (verse: IVerse) => {
@@ -190,61 +224,40 @@ onUnmounted(() => {
     </div>
     <div class="col-span-1 bg-black p-4">
       <div class="flex flex-col gap-4">
-        <NuxtLink to="/" class="px-8">
+        <!-- <NuxtLink to="/" class="px-8">
           <img
             src="/dark-logo-1.svg"
             alt="kalamullah"
             class="w-full h-[180px]"
           />
-        </NuxtLink>
-        <div class="flex flex-col gap-4">
+        </NuxtLink> -->
+        <div class="flex flex-col gap-4 mt-5">
           <h2
-            class="text-2xl font-bold bg-gradient-to-r from-yellow-500 via-red-500 to-orange-800 text-transparent bg-clip-text font-oleo"
+            class="text-2xl font-bold bg-gradient-to-r from-yellow-500 via-red-500 to-orange-800 text-transparent bg-clip-text font-oleo uppercase"
           >
-            Find Verse
+            Pengaturan
           </h2>
-          <div class="mb-4">
-            <div class="flex flex-col gap-2">
-              <label for="ayat">Verse</label>
-              <div class="flex w-full">
-                <input
-                  type="number"
-                  id="ayat"
-                  name="ayat"
-                  class="p-2 border border-gray-800/50 rounded-s-lg w-full"
-                />
-                <button
-                  class="bg-gradient-to-r from-yellow-500 via-red-500 to-orange-800 text-white font-bold rounded-e-lg py-2 px-4"
-                >
-                  <Icon name="bi:search" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="flex flex-col gap-4">
-          <h2
-            class="text-2xl font-bold bg-gradient-to-r from-yellow-500 via-red-500 to-orange-800 text-transparent bg-clip-text font-oleo"
-          >
-            Filter Qori
-          </h2>
-          <div class="flex flex-col gap-4">
-            <div class="flex flex-col gap-2">
-              <label for="ayat">Ayat</label>
-              <input
-                type="number"
-                id="ayat"
+          <div class="grid grid-cols-3 gap-4 justify-between items-center mb-3">
+            <label for="ayat">Ayat</label>
+            <div class="col-span-2">
+              <USelect
                 name="ayat"
-                class="p-2 border border-gray-800/50 rounded-lg"
+                placeholder="Pilih Ayat"
+                v-model="verse"
+                size="xl"
+                :options="verseOptions"
               />
             </div>
-            <div class="flex flex-col gap-2">
-              <label for="qori">Qori</label>
-              <input
-                type="text"
-                id="qori"
+          </div>
+          <div class="grid grid-cols-3 gap-4 justify-between items-center mb-3">
+            <label for="qori">Qori</label>
+            <div class="col-span-2">
+              <USelect
                 name="qori"
-                class="p-2 border border-gray-800/50 rounded-lg"
+                placeholder="Pilih Qori"
+                v-model="qori"
+                size="xl"
+                :options="qoriOptions"
               />
             </div>
           </div>

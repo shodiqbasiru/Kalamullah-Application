@@ -18,6 +18,7 @@
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@vueuse/nuxt": "^11.0.3",
-    "tailwind-scrollbar": "^3.1.0"
+    "tailwind-scrollbar": "^3.1.0",
+    "@nuxt/ui": "npm:@nuxt/ui-edge@latest"
   }
 }
