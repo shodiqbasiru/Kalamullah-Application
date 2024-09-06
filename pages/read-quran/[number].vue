@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const { data, verseOptions } = useSurahData();
+const { data } = useSurahData();
 const {
   data: { selectedVerse, isPaused, qori },
   methods: { playAudio, handlePlay, handlePause, handleStop },
@@ -16,6 +16,13 @@ const qoriOptions = [
   { label: "Ibrahim Al Dossari", value: "04" },
   { label: "Misyari Rasyid Al Afasi", value: "05" },
 ];
+
+const verseOptions = computed(() => {
+  return data.value?.verses.map((v) => ({
+    label: v.verseNumber,
+    value: v.verseNumber,
+  }));
+});
 
 const updateGradientBarWidth = () => {
   if (el.value) {
@@ -53,6 +60,10 @@ watch(verse, (newVerse) => {
   }
 });
 
+watch(data, () => {
+  verse.value = data.value?.verses[0].verseNumber;
+});
+
 onMounted(() => {
   if (el.value) {
     el.value.addEventListener("scroll", updateGradientBarWidth);
@@ -62,6 +73,10 @@ onMounted(() => {
 onUnmounted(() => {
   if (el.value) {
     el.value.removeEventListener("scroll", updateGradientBarWidth);
+  }
+
+  if (selectedVerse.value) {
+    handleStop();
   }
 });
 </script>
