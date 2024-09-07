@@ -40,3 +40,14 @@ export interface IVerse {
     translation: string;
     audio: Record<string, string>;
 }
+
+export interface IInterpretation {
+    number: number
+    latinName: string;
+    interpretations: IInterpretations[];
+}
+
+export interface IInterpretations {
+    verse: number;
+    text: string;
+}

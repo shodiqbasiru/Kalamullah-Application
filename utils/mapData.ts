@@ -1,4 +1,10 @@
-import type { ISurah, ISurahDetail, IVerse } from "~/types/interfaces";
+import type {
+  IInterpretation,
+  IInterpretations,
+  ISurah,
+  ISurahDetail,
+  IVerse,
+} from "~/types/interfaces";
 
 export function mappingSurahJson(data: any): ISurah {
   return {
@@ -17,7 +23,6 @@ export function mappingSurahDetailJson(
   data: any,
   verse: IVerse[]
 ): ISurahDetail {
-    
   const arrVerse = verse.map((item: any) => mappingVerseJson(item));
 
   return {
@@ -45,6 +50,18 @@ export function mappingSurahDetailJson(
   };
 }
 
+export function mappingInterpretationJson(data: any): IInterpretation {
+  const interpretations = data.tafsir.map((item: any) =>
+    mappingInterpretationsJson(item)
+  );
+
+  return {
+    number: data.nomor,
+    latinName: data.namaLatin,
+    interpretations: interpretations,
+  };
+}
+
 function mappingVerseJson(data: any): IVerse {
   return {
     verseNumber: data.nomorAyat,
@@ -52,5 +69,12 @@ function mappingVerseJson(data: any): IVerse {
     latinText: data.teksLatin,
     translation: data.teksIndonesia,
     audio: data.audio,
+  };
+}
+
+function mappingInterpretationsJson(data: any): IInterpretations {
+  return {
+    verse: data.ayat,
+    text: data.teks,
   };
 }

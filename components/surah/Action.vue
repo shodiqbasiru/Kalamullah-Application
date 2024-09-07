@@ -8,6 +8,7 @@ defineProps<{
   onStop: Function;
   onPause: Function;
   isPaused: Boolean;
+  showModal: Function;
 }>();
 </script>
 
@@ -20,6 +21,7 @@ defineProps<{
     class="flex flex-col py-4 pe-4 gap-4 border-e"
   >
     <span
+      @click="showModal(verse)"
       class="text-4xl text-gray-50 cursor-pointer hover:text-gray-300 transition-all duration-100 ease-in-out"
     >
       <Icon name="material-symbols:book-2-rounded" />

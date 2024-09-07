@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-const { data } = useSurahData();
+import type { IInterpretations, IVerse } from "~/types/interfaces";
+
+const { data, interpretation } = useSurahData();
 const {
   data: { selectedVerse, isPaused, qori },
   methods: { playAudio, handlePlay, handlePause, handleStop },
@@ -8,6 +10,25 @@ const {
 const verse = ref();
 const el = ref<HTMLElement | null>(null);
 const gradientBarWidth = ref("0%");
+const isOpen = ref(false);
+const tafsir = ref<string | undefined>(undefined);
+const surahName = ref<string | undefined>(undefined);
+
+const showModal = (verse: IVerse) => {
+  selectedVerse.value = verse;
+  tafsir.value = interpretation.value?.interpretations.find(
+    (i) => i.verse === verse.verseNumber
+  )?.text;
+  surahName.value = interpretation.value?.latinName;
+  isOpen.value = true;
+};
+
+const closeModal = () => {
+  isOpen.value = false;
+  selectedVerse.value = undefined;
+  tafsir.value = undefined;
+  surahName.value = undefined;
+};
 
 const qoriOptions = [
   { label: "Abdullah Al Juhany", value: "01" },
@@ -87,6 +108,14 @@ onUnmounted(() => {
       <SurahNavigation />
     </div>
     <div class="col-span-3 flex-1 bg-black p-4">
+      <AppModal
+        :isOpen="isOpen"
+        @closeModal="closeModal"
+        :verse="selectedVerse"
+        :tafsir="tafsir"
+        :surahName="surahName"
+      />
+
       <div
         class="mb-4 text-white text-center drop-shadow-2xl shadow-gray-500 rounded-lg"
       >
@@ -134,6 +163,7 @@ onUnmounted(() => {
               :onPause="handlePause"
               :onStop="handleStop"
               :isPaused="isPaused"
+              :showModal="showModal"
             />
 
             <div
