@@ -10,7 +10,7 @@ const handlePlay = () => {
 
 <template>
   <div
-    class="flex justify-center items-center py-4 pe-4 gap-4"
+    class="flex justify-center items-center py-4 pe-4 gap-4 bg-gray-900 text-white rounded-lg"
   >
     <span
       class="text-2xl text-yellow-400 cursor-pointer hover:text-yellow-600 transition-all duration-100 ease-in-out"

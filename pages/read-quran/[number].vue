@@ -1,6 +1,20 @@
 <script lang="ts" setup>
 import type { IInterpretations, IVerse } from "~/types/interfaces";
 
+definePageMeta({
+  layout:"surah",
+})
+
+useHead({
+  title: "Read Quran",
+  meta: [
+    {
+      name: "description",
+      content: "Read Quran page",
+    },
+  ],
+});
+
 const { data, interpretation } = useSurahData();
 const {
   data: { selectedVerse, isPaused, qori },
@@ -199,16 +213,16 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
-    <div class="col-span-1 bg-black p-4">
-      <div class="flex flex-col gap-4">
-        <!-- <NuxtLink to="/" class="px-8">
+    <div class="col-span-1 bg-black">
+      <div class="flex flex-col gap-4 px-8">
+        <NuxtLink to="/">
           <img
             src="/dark-logo-1.svg"
             alt="kalamullah"
             class="w-full h-[180px]"
           />
-        </NuxtLink> -->
-        <div class="flex flex-col gap-4 mt-5">
+        </NuxtLink>
+        <div class="flex flex-col gap-4 my-5">
           <h2
             class="text-2xl font-bold bg-gradient-to-r from-yellow-500 via-red-500 to-orange-800 text-transparent bg-clip-text font-oleo uppercase"
           >
@@ -239,6 +253,33 @@ onUnmounted(() => {
             </div>
           </div>
         </div>
+
+        <div class="flex-1 flex flex-col gap-4">
+          <h2
+            class="text-2xl font-bold bg-gradient-to-r from-yellow-500 via-red-500 to-orange-800 text-transparent bg-clip-text font-oleo uppercase"
+          >
+            Navigation
+          </h2>
+          <div class="flex flex-col gap-4">
+            <NuxtLink to="/" class="text-white hover:bg-gradient-to-r hover:from-yellow-500 hover:via-red-500 hover:to-orange-800 hover:text-transparent hover:bg-clip-text">
+              Home
+            </NuxtLink>
+
+            <NuxtLink to="/read-quran" class="text-white hover:bg-gradient-to-r hover:from-yellow-500 hover:via-red-500 hover:to-orange-800 hover:text-transparent hover:bg-clip-text">
+              Surah
+            </NuxtLink>
+
+            <NuxtLink to="/" class="text-white hover:bg-gradient-to-r hover:from-yellow-500 hover:via-red-500 hover:to-orange-800 hover:text-transparent hover:bg-clip-text">
+              Tafsir
+            </NuxtLink>
+          </div>
+        </div>
+
+        <footer class="border-t border-gray-800/50 py-8 mt-5">
+          <p class="text-center text-white text-sm">
+            &copy; 2024 Kalamullah. All rights reserved.
+          </p>
+        </footer>
       </div>
     </div>
   </div>
