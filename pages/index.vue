@@ -8,7 +8,7 @@ const dataNavigation = [
   {
     name: "Surah",
     image: Quran,
-    route: "/read-quran/1",
+    route: "/read-quran",
   },
   {
     name: "Tafsir",

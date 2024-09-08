@@ -2,8 +2,8 @@
 import type { IInterpretations, IVerse } from "~/types/interfaces";
 
 definePageMeta({
-  layout:"surah",
-})
+  layout: "surah",
+});
 
 useHead({
   title: "Read Quran",
@@ -261,15 +261,24 @@ onUnmounted(() => {
             Navigation
           </h2>
           <div class="flex flex-col gap-4">
-            <NuxtLink to="/" class="text-white hover:bg-gradient-to-r hover:from-yellow-500 hover:via-red-500 hover:to-orange-800 hover:text-transparent hover:bg-clip-text">
+            <NuxtLink
+              to="/"
+              class="text-white hover:bg-gradient-to-r hover:from-yellow-500 hover:via-red-500 hover:to-orange-800 hover:text-transparent hover:bg-clip-text"
+            >
               Home
             </NuxtLink>
 
-            <NuxtLink to="/read-quran" class="text-white hover:bg-gradient-to-r hover:from-yellow-500 hover:via-red-500 hover:to-orange-800 hover:text-transparent hover:bg-clip-text">
+            <NuxtLink
+              to="/read-quran"
+              class="text-white hover:bg-gradient-to-r hover:from-yellow-500 hover:via-red-500 hover:to-orange-800 hover:text-transparent hover:bg-clip-text"
+            >
               Surah
             </NuxtLink>
 
-            <NuxtLink to="/" class="text-white hover:bg-gradient-to-r hover:from-yellow-500 hover:via-red-500 hover:to-orange-800 hover:text-transparent hover:bg-clip-text">
+            <NuxtLink
+              to="/"
+              class="text-white hover:bg-gradient-to-r hover:from-yellow-500 hover:via-red-500 hover:to-orange-800 hover:text-transparent hover:bg-clip-text"
+            >
               Tafsir
             </NuxtLink>
           </div>

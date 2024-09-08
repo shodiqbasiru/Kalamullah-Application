@@ -43,7 +43,12 @@ const filteredSurah = computed(() => {
   <div
     class="flex flex-col w-full text-white p-2 border-e border-gray-800/50 scrollbar-thin scrollbar-thumb-orange-500 scrollbar-track-black overflow-y-auto max-h-[calc(80vh-1rem)]"
   >
-    <SurahCard :surah="filteredSurah" />
+    <div class="grid grid-cols-1 gap-4" style="direction: rtl">
+      <SurahCard :surah="filteredSurah" />
+    </div>
+    <div v-if="filteredSurah.length === 0" class="text-center text-white">
+      <p>Surah tidak ditemukan</p>
+    </div>
   </div>
 </template>
 
