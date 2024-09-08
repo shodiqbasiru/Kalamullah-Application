@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { ISurah } from "~/types/interfaces";
+import type { ISurah } from "~/models/data";
 
 const { data } = await useFetch("/api/surah");
 const surahName = ref<string>("");

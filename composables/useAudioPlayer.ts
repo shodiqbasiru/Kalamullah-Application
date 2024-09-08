@@ -1,4 +1,4 @@
-import type { IVerse } from "~/types/interfaces";
+import type { IVerse } from "~/models/data";
 
 export const useAudioPlayer = () => {
   const { data } = useSurahData();
@@ -67,7 +67,7 @@ export const useAudioPlayer = () => {
   };
 
   return {
-    data: { isPaused, selectedVerse,qori },
+    data: { isPaused, selectedVerse, qori },
     methods: { playAudio, handlePlay, handlePause, handleStop },
   };
 };

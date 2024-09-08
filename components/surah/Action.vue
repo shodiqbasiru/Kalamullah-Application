@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { IVerse } from "~/types/interfaces";
+import type { IVerse } from "~/models/data";
 
 defineProps<{
   selectedVerse: IVerse | undefined;

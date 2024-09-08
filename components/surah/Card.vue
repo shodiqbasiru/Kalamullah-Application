@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { ISurah } from "~/types/interfaces";
+import type { ISurah } from "~/models/data";
 
 defineProps<{ surah: ISurah[] }>();
 
 const router = useRouter();
 
 const handleClick = (number: number) => {
-  router.push(`/read-quran/${number}`);
+  router.push(`/surah/${number}`);
 };
 </script>
 
@@ -29,7 +29,6 @@ const handleClick = (number: number) => {
       </p>
     </div>
   </div>
-  
 </template>
 
 <style scoped></style>

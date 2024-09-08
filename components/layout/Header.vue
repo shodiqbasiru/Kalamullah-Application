@@ -8,11 +8,10 @@
       </NuxtLink>
       <nav class="ml-auto flex gap-8 text-xl uppercase tracking-wider pt-7">
         <NuxtLink to="/">Home</NuxtLink>
-        <NuxtLink to="/read-quran/1">Surah</NuxtLink>
+        <NuxtLink to="/surah/1">Surah</NuxtLink>
         <NuxtLink to="/tafsir">Tafsir</NuxtLink>
         <NuxtLink to="/doa">Doa</NuxtLink>
-        <NuxtLink to="/about">About</NuxtLink>
-        <NuxtLink to="/contact">Contact</NuxtLink>
+        <NuxtLink to="/hadist">Hadist</NuxtLink>
       </nav>
     </header>
   </PageContainer>

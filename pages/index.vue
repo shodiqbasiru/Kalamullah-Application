@@ -8,7 +8,7 @@ const dataNavigation = [
   {
     name: "Surah",
     image: Quran,
-    route: "/read-quran",
+    route: "/surah",
   },
   {
     name: "Tafsir",
@@ -80,28 +80,24 @@ const dataNavigation = [
       </div>
     </div>
 
-    <div class="grid grid-cols-6 my-16">
-      <div class="col-span-3 col-start-2 col-end-6">
-        <div class="grid grid-cols-2 gap-8">
-          <div
-            v-for="(nav, index) in dataNavigation"
-            :key="index"
-            class="p-8 rounded-xl border border-orange-500 hover:border-transparent hover:shadow-lg hover:bg-gradient-to-br hover:from-yellow-500 hover:to-orange-800 transition-all duration-300 ease-in-out"
-          >
-            <NuxtLink :to="nav.route">
-              <div class="relative">
-                <img
-                  :src="nav.image"
-                  :alt="nav.name"
-                  class="w-[100px] object-cover block mx-auto"
-                />
-              </div>
-              <p class="text-center text-white font-semibold mt-4">
-                {{ nav.name }}
-              </p>
-            </NuxtLink>
+    <div class="grid grid-cols-2 gap-8 my-16 mx-24">
+      <div
+        v-for="(nav, index) in dataNavigation"
+        :key="index"
+        class="p-8 rounded-xl border border-orange-500 hover:border-transparent hover:shadow-lg hover:bg-gradient-to-br hover:from-yellow-500 hover:to-orange-800 transition-all duration-300 ease-in-out"
+      >
+        <NuxtLink :to="nav.route">
+          <div class="relative">
+            <img
+              :src="nav.image"
+              :alt="nav.name"
+              class="w-[100px] object-cover block mx-auto"
+            />
           </div>
-        </div>
+          <p class="text-center text-white font-semibold mt-4">
+            {{ nav.name }}
+          </p>
+        </NuxtLink>
       </div>
     </div>
   </PageContainer>

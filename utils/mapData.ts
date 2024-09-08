@@ -4,7 +4,7 @@ import type {
   ISurah,
   ISurahDetail,
   IVerse,
-} from "~/types/interfaces";
+} from "~/models/data";
 
 export function mappingSurahJson(data: any): ISurah {
   return {

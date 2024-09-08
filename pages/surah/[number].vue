@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { IInterpretations, IVerse } from "~/types/interfaces";
+import type { IInterpretations, IVerse } from "~/models/data";
 
 definePageMeta({
   layout: "surah",
