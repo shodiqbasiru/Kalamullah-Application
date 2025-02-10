@@ -1,0 +1,8 @@
+@font-face {
+  font-family: 'LPMQ Isep Misbah';
+  src: url('../fonts/LPMQ IsepMisbah.ttf') format('truetype');
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
