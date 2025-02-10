@@ -1,25 +1,32 @@
 <script lang="ts" setup>
-import type { IInterpretations, IVerse } from "~/models/data";
+import type { IVerse } from "~/models/data";
 
 definePageMeta({
   layout: "surah",
 });
 
 useHead({
-  title: "Read Quran",
+  title: "Kalamullah | Surah Page",
   meta: [
     {
       name: "description",
-      content: "Read Quran page",
+      content: "Surah page",
     },
   ],
 });
 
-const { data, interpretation } = useSurahData();
+const route = useRoute();
+const { methods:{getSurah}, data:{surah} } = useSurahData();
+const { getInterpretationByNumber } = useInterpretation();
 const {
   data: { selectedVerse, isPaused, qori },
   methods: { playAudio, handlePlay, handlePause, handleStop },
 } = useAudioPlayer();
+
+const { number } = route.params;
+getSurah(number);
+
+const interpretation = await getInterpretationByNumber(number);
 
 const verse = ref();
 const el = ref<HTMLElement | null>(null);
@@ -53,7 +60,7 @@ const qoriOptions = [
 ];
 
 const verseOptions = computed(() => {
-  return data.value?.verses.map((v) => ({
+  return surah.value?.verses.map((v) => ({
     label: v.verseNumber,
     value: v.verseNumber,
   }));
@@ -86,23 +93,23 @@ watch(qori, (newQori) => {
   }
 });
 
-watch(verse, (newVerse) => {
-  if (newVerse) {
-    const verseElement = document.getElementById(`verse-${newVerse}`);
-    if (verseElement) {
-      verseElement.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  }
-});
-
-watch(data, () => {
-  verse.value = data.value?.verses[0].verseNumber;
+watch(surah, () => {
+  verse.value = surah.value?.verses[0].verseNumber;
 });
 
 onMounted(() => {
   if (el.value) {
     el.value.addEventListener("scroll", updateGradientBarWidth);
   }
+
+  watch(verse, (newVerse) => {
+    if (newVerse) {
+      const verseElement = document.getElementById(`verse-${newVerse}`);
+      if (verseElement) {
+        verseElement.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }
+  });
 });
 
 onUnmounted(() => {
@@ -137,16 +144,16 @@ onUnmounted(() => {
           <h2
             class="text-4xl font-bold font-oleo bg-gradient-to-r from-yellow-500 via-red-500 to-orange-800 text-transparent bg-clip-text"
           >
-            {{ data?.latinName }}
+            {{ surah?.latinName }}
           </h2>
           <span class="text-4xl"> - </span>
           <h1 class="text-4xl font-bold font-lpmq" style="direction: rtl">
-            {{ data?.name }}
+            {{ surah?.name }}
           </h1>
         </div>
         <p class="text-md mt-4">
-          {{ data?.meaning }} - {{ data?.verseCount }} ayat -
-          {{ data?.revelationPlace }}
+          {{ surah?.meaning }} - {{ surah?.verseCount }} ayat -
+          {{ surah?.revelationPlace }}
         </p>
       </div>
       <div class="bg-gray-900 h-2 rounded-full mb-8 me-6">
@@ -160,7 +167,7 @@ onUnmounted(() => {
         class="border-e border-gray-800/50 scrollbar-thin scrollbar-thumb-orange-500 scrollbar-track-black overflow-y-auto max-h-[calc(80vh-1rem)]"
       >
         <div
-          v-for="verse in data?.verses"
+          v-for="verse in surah?.verses"
           :id="'verse-' + verse.verseNumber"
           :key="verse.verseNumber"
           :class="{
@@ -269,7 +276,7 @@ onUnmounted(() => {
             </NuxtLink>
 
             <NuxtLink
-              to="/read-quran"
+              to="/surah"
               class="text-white hover:bg-gradient-to-r hover:from-yellow-500 hover:via-red-500 hover:to-orange-800 hover:text-transparent hover:bg-clip-text"
             >
               Surah

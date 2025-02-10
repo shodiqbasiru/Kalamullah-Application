@@ -1,20 +1,19 @@
 <script lang="ts" setup>
-import type { ISurah } from "~/models/data";
-
-const { data } = await useFetch("/api/surah");
-const surahName = ref<string>("");
-
-const handleSearch = (e: Event) => {
-  const target = e.target as HTMLInputElement;
-  surahName.value = target.value;
-};
-
-const filteredSurah = computed(() => {
-  if (!data.value) return [];
-  return data.value.filter((surah: ISurah) =>
-    surah.latinName.toLowerCase().includes(surahName.value.toLowerCase())
-  );
+useHead({
+  title: "Kalamullah | Surah Page",
+  meta: [
+    {
+      name: "description",
+      content: "Surah page",
+    },
+  ],
 });
+
+const {
+  computed: { filteredSurah },
+  methods: { getAllSurah, handleSearch },
+} = useSurahData();
+getAllSurah();
 </script>
 
 <template>

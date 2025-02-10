@@ -14,6 +14,9 @@ export default defineNuxtConfig({
       title: "Kalamullah"
     }
   },
+  experimental: {
+    asyncContext: true
+  },
   tailwindcss: {
     cssPath: ["~/assets/css/tailwind.css", { injectPosition: "first" }],
     configPath: "tailwind.config",
