@@ -15,15 +15,21 @@ export function mappingSurahJson(data: any): ISurah {
     revelationPlace: data.tempatTurun,
     meaning: data.arti,
     description: data.deskripsi,
-    audioFull: data.audioFull,
+    audioFull: data.audioFull ?? {},
   };
 }
 
-export function mappingSurahDetailJson(
-  data: any,
-  verse: IVerse[]
-): ISurahDetail {
+export function mappingSurahDetailJson(data: any, verse: any[]): ISurahDetail {
   const arrVerse = verse.map((item: any) => mappingVerseJson(item));
+
+  // BUG FIX: kode lama memetakan nextSurah & prevSurah dari `data` yang sama
+  // (nomor, nama, dll dari surah itu sendiri) → keduanya selalu identik.
+  // API equran.id mengembalikan:
+  //   data.suratSebelumnya → { nomor, nama, namaLatin, jumlahAyat } | false
+  //   data.suratSelanjutnya → { nomor, nama, namaLatin, jumlahAyat } | false
+
+  const prev = data.suratSebelumnya;
+  const next = data.suratSelanjutnya;
 
   return {
     number: data.nomor,
@@ -33,32 +39,36 @@ export function mappingSurahDetailJson(
     revelationPlace: data.tempatTurun,
     meaning: data.arti,
     description: data.deskripsi,
-    audioFull: data.audioFull,
+    audioFull: data.audioFull ?? {},
     verses: arrVerse,
-    nextSurah: {
-      number: data.nomor,
-      name: data.nama,
-      latinName: data.namaLatin,
-      verseCount: data.jumlahAyat,
-    },
-    prevSurah: {
-      number: data.nomor,
-      name: data.nama,
-      latinName: data.namaLatin,
-      verseCount: data.jumlahAyat,
-    },
+    // Guard: API mengembalikan `false` jika tidak ada prev/next
+    prevSurah: prev
+      ? {
+          number: prev.nomor,
+          name: prev.nama,
+          latinName: prev.namaLatin,
+          verseCount: prev.jumlahAyat,
+        }
+      : null,
+    nextSurah: next
+      ? {
+          number: next.nomor,
+          name: next.nama,
+          latinName: next.namaLatin,
+          verseCount: next.jumlahAyat,
+        }
+      : null,
   };
 }
 
 export function mappingInterpretationJson(data: any): IInterpretation {
-  const interpretations = data.tafsir.map((item: any) =>
-    mappingInterpretationsJson(item)
+  const interpretations = (data.tafsir ?? []).map((item: any) =>
+    mappingInterpretationsJson(item),
   );
-
   return {
     number: data.nomor,
     latinName: data.namaLatin,
-    interpretations: interpretations,
+    interpretations,
   };
 }
 
@@ -68,7 +78,7 @@ function mappingVerseJson(data: any): IVerse {
     arabicText: data.teksArab,
     latinText: data.teksLatin,
     translation: data.teksIndonesia,
-    audio: data.audio,
+    audio: data.audio ?? {},
   };
 }
 

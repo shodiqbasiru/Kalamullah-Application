@@ -1,55 +1,93 @@
 <script lang="ts" setup>
 import type { ISurah } from "~/models/data";
 
-const { data } = await useFetch("/api/surah");
+// Emit so parent (mobile sidebar) knows to close when user navigates
+const emit = defineEmits<{ navigate: [] }>();
+
+const { data } = await useFetch<ISurah[]>("/api/surah");
 const surahName = ref<string>("");
 
 const handleSearch = (e: Event) => {
-  const target = e.target as HTMLInputElement;
-  surahName.value = target.value;
+  surahName.value = (e.target as HTMLInputElement).value;
 };
 
-const filteredSurah = computed(() => {
+const filteredSurah = computed<ISurah[]>(() => {
   if (!data.value) return [];
-  return data.value.filter((surah: ISurah) =>
-    surah.latinName.toLowerCase().includes(surahName.value.toLowerCase())
+  const q = surahName.value.toLowerCase().trim();
+  if (!q) return data.value;
+  return data.value.filter(
+    (s) =>
+      s.latinName.toLowerCase().includes(q) ||
+      s.name.includes(q) ||
+      s.meaning.toLowerCase().includes(q),
   );
 });
+
+const handleNavigate = () => emit("navigate");
 </script>
 
 <template>
-  <div class="w-full mb-4">
-    <NuxtLink to="/" class="px-8">
-      <img src="/dark-logo-2.svg" alt="kalamullah" class="w-full h-[100px]" />
-    </NuxtLink>
-    <div class="flex px-3">
-      <input
-        type="text"
-        @input="handleSearch"
-        placeholder="Cari surah"
-        class="w-full px-4 py-2 bg-gray-800 text-white border border-gray-800 rounded-s-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-      />
-      <button
-        @click="handleSearch"
-        class="bg-gradient-to-br from-yellow-500 to-orange-800 px-4 py-2 flex justify-center items-center rounded-e-lg"
-      >
-        <span class="text-2xl">
-          <Icon name="material-symbols:search" />
+  <div class="flex flex-col h-full">
+    <!-- Logo -->
+    <div class="px-4 pt-5 pb-4 border-b border-app flex-shrink-0">
+      <NuxtLink to="/" class="flex items-center gap-2 group" @click="handleNavigate">
+        <div
+          class="w-8 h-8 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-900/30 group-hover:scale-105 transition-transform duration-200"
+        >
+          <Icon
+            name="material-symbols:menu-book-rounded"
+            class="text-sm text-white"
+          />
+        </div>
+        <span
+          class="text-base font-bold font-oleo text-fire-gradient group-hover:opacity-90 transition-opacity"
+        >
+          Kalamullah
         </span>
-      </button>
+      </NuxtLink>
     </div>
-  </div>
 
-  <div
-    class="flex flex-col w-full text-white p-2 border-e border-gray-800/50 scrollbar-thin scrollbar-thumb-orange-500 scrollbar-track-black overflow-y-auto max-h-[calc(80vh-1rem)]"
-  >
-    <div class="grid grid-cols-1 gap-4" style="direction: rtl">
-      <SurahCard :surah="filteredSurah" />
+    <!-- Search -->
+    <div class="px-3 pt-3 pb-2 flex-shrink-0">
+      <div class="relative">
+        <Icon
+          name="material-symbols:search"
+          class="absolute left-3 top-1/2 -translate-y-1/2 text-app-subtle text-base pointer-events-none"
+        />
+        <input
+          type="text"
+          @input="handleSearch"
+          placeholder="Cari surah..."
+          class="w-full pl-9 pr-4 py-2 bg-app-card border border-app rounded-xl text-xs text-app placeholder-app-subtle focus:outline-none focus:border-amber-500/50 transition-all duration-200 font-quicksand"
+        />
+      </div>
+      <p class="text-[10px] text-app-subtle mt-1.5 px-1 font-opensans">
+        {{ filteredSurah.length }} surah
+      </p>
     </div>
-    <div v-if="filteredSurah.length === 0" class="text-center text-white">
-      <p>Surah tidak ditemukan</p>
+
+    <!-- Surah list -->
+    <div
+      class="flex-1 overflow-y-auto scrollbar-gold px-2 py-1"
+      style="direction: rtl"
+    >
+      <div class="grid grid-cols-1 gap-1" @click="handleNavigate">
+        <SurahCard :surah="filteredSurah" />
+      </div>
+
+      <div
+        v-if="filteredSurah.length === 0"
+        class="text-center py-12"
+        style="direction: ltr"
+      >
+        <Icon
+          name="material-symbols:search-off-rounded"
+          class="text-3xl text-app-subtle mb-2"
+        />
+        <p class="text-xs text-app-subtle font-opensans">
+          Surah tidak ditemukan
+        </p>
+      </div>
     </div>
   </div>
 </template>
-
-<style></style>

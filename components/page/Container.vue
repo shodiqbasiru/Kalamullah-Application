@@ -1,5 +1,8 @@
 <template>
-  <div class="container mx-auto max-w-screen-xl w-full px-4 lg:p-0 relative z-20">
+  <!-- Max-width container, centered, with responsive horizontal padding -->
+  <div
+    class="container mx-auto max-w-screen-xl w-full px-4 sm:px-6 lg:px-8 relative z-20"
+  >
     <slot />
   </div>
 </template>

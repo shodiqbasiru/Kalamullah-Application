@@ -1,53 +1,44 @@
 export interface ISurah {
-    number: number;
-    name: string;
-    latinName: string;
-    verseCount: number;
-    revelationPlace: string;
-    meaning: string;
-    description: string;
-    audioFull: Record<string, string>;
+  number: number;
+  name: string;
+  latinName: string;
+  verseCount: number;
+  revelationPlace: string;
+  meaning: string;
+  description: string;
+  audioFull: Record<string, string>;
 }
 
-export interface ISurahDetail {
-    number: number;
-    name: string;
-    latinName: string;
-    verseCount: number;
-    revelationPlace: string;
-    meaning: string;
-    description: string;
-    audioFull: Record<string, string>;
-    verses: IVerse[];
-    nextSurah: {
-        number: number;
-        name: string;
-        latinName: string;
-        verseCount: number;
-    },
-    prevSurah: {
-        number: number;
-        name: string;
-        latinName: string;
-        verseCount: number;
-    }
+// BUG FIX: prevSurah & nextSurah bisa null (surah pertama tidak punya prev,
+// surah terakhir tidak punya next). API mengembalikan `false` → kita map ke null.
+export interface ISurahNav {
+  number: number;
+  name: string;
+  latinName: string;
+  verseCount: number;
+}
+
+export interface ISurahDetail extends ISurah {
+  verses: IVerse[];
+  prevSurah: ISurahNav | null;
+  nextSurah: ISurahNav | null;
 }
 
 export interface IVerse {
-    verseNumber: number;
-    arabicText: string;
-    latinText: string;
-    translation: string;
-    audio: Record<string, string>;
+  verseNumber: number;
+  arabicText: string;
+  latinText: string;
+  translation: string;
+  audio: Record<string, string>;
 }
 
 export interface IInterpretation {
-    number: number
-    latinName: string;
-    interpretations: IInterpretations[];
+  number: number;
+  latinName: string;
+  interpretations: IInterpretations[];
 }
 
 export interface IInterpretations {
-    verse: number;
-    text: string;
+  verse: number;
+  text: string;
 }

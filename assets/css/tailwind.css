@@ -1,8 +1,370 @@
 @font-face {
-  font-family: 'LPMQ Isep Misbah';
-  src: url('../fonts/LPMQ IsepMisbah.ttf') format('truetype');
+  font-family: "LPMQ Isep Misbah";
+  src: url("../fonts/LPMQ IsepMisbah.ttf") format("truetype");
 }
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ════════════════════════════════════════════════════════
+   BASE — CSS Variables per mode
+════════════════════════════════════════════════════════ */
+@layer base {
+  /* ── Dark mode (default) ── */
+  :root,
+  .dark {
+    --bg-primary: theme("colors.gray.950");
+    --bg-secondary: theme("colors.gray.900");
+    --bg-card: rgba(17, 17, 17, 0.8);
+    --bg-glass: rgba(255, 255, 255, 0.03);
+
+    --text-primary: theme("colors.gray.50");
+    --text-secondary: theme("colors.gray.400");
+    --text-muted: theme("colors.gray.600");
+
+    --border-base: rgba(255, 255, 255, 0.06);
+    --border-subtle: rgba(255, 255, 255, 0.04);
+    --border-gold: rgba(245, 158, 11, 0.25);
+
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
+    --shadow-gold: 0 0 20px rgba(245, 158, 11, 0.15);
+
+    --scrollbar-thumb: #d97706;
+    --scrollbar-track: transparent;
+
+    --glow-1: rgba(217, 119, 6, 0.05);
+    --glow-2: rgba(194, 65, 12, 0.05);
+    --glow-3: rgba(202, 138, 4, 0.04);
+
+    --logo-src: url("/dark-logo-2.svg");
+  }
+
+  /* ── Light mode ── */
+  .light {
+    --bg-primary: #FAF8F5;
+    --bg-secondary: theme("colors.white");
+    --bg-card: rgba(255, 255, 255, 0.9);
+    --bg-glass: rgba(255, 255, 255, 0.7);
+
+    --text-primary: theme("colors.gray.900");
+    --text-secondary: theme("colors.gray.600");
+    --text-muted: theme("colors.gray.400");
+
+    --border-base: rgba(0, 0, 0, 0.08);
+    --border-subtle: rgba(0, 0, 0, 0.05);
+    --border-gold: rgba(217, 119, 6, 0.3);
+
+    --shadow-card:
+      0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.06);
+    --shadow-gold: 0 0 20px rgba(245, 158, 11, 0.12);
+
+    --scrollbar-thumb: #d97706;
+    --scrollbar-track: rgba(0, 0, 0, 0.05);
+
+    --glow-1: rgba(217, 119, 6, 0.06);
+    --glow-2: rgba(194, 65, 12, 0.04);
+    --glow-3: rgba(202, 138, 4, 0.03);
+
+    --logo-src: url("/light-logo-2.svg");
+  }
+
+  /* ── Resets ── */
+  *,
+  *::before,
+  *::after {
+    transition-property:
+      color, background-color, border-color, opacity, box-shadow;
+    transition-duration: 200ms;
+    transition-timing-function: ease;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply font-quicksand;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  ::selection {
+    @apply bg-amber-500/30 text-amber-700;
+    .dark & {
+      @apply text-amber-200;
+    }
+  }
+}
+
+/* ════════════════════════════════════════════════════════
+   SEMANTIC UTILITY CLASSES (mode-aware)
+════════════════════════════════════════════════════════ */
+@layer utilities {
+  /* ── Backgrounds ── */
+  .bg-app {
+    background-color: var(--bg-primary);
+  }
+  .bg-app-card {
+    background-color: var(--bg-secondary);
+  }
+  .bg-app-glass {
+    background-color: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .bg-app-glow-1 {
+    background-color: var(--glow-1);
+  }
+  .bg-app-glow-2 {
+    background-color: var(--glow-2);
+  }
+  .bg-app-glow-3 {
+    background-color: var(--glow-3);
+  }
+
+  /* ── Text ── */
+  .text-app {
+    color: var(--text-primary);
+  }
+  .text-app-muted {
+    color: var(--text-secondary);
+  }
+  .text-app-subtle {
+    color: var(--text-muted);
+  }
+
+  /* ── Borders ── */
+  .border-app {
+    border-color: var(--border-base);
+  }
+  .border-app-gold {
+    border-color: var(--border-gold);
+  }
+
+  /* ── Gradient text ── */
+  .text-gold-gradient {
+    @apply bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 bg-clip-text text-transparent;
+  }
+  .text-fire-gradient {
+    @apply bg-gradient-to-r from-yellow-500 via-orange-500 to-red-600 bg-clip-text text-transparent;
+  }
+
+  /* ── Islamic geometric pattern ── */
+  .pattern-islamic {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f59e0b' fill-opacity='0.02'%3E%3Cpath d='M30 0l8.66 5v10L30 20l-8.66-5V5L30 0zm0 40l8.66 5v10L30 60l-8.66-5V45L30 40zM0 20l8.66 5v10L0 40l-8.66-5V25L0 20zm60 0l8.66 5v10L60 40l-8.66-5V25L60 20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* Light mode pattern slightly more visible */
+  .light .pattern-islamic {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d97706' fill-opacity='0.015'%3E%3Cpath d='M30 0l8.66 5v10L30 20l-8.66-5V5L30 0zm0 40l8.66 5v10L30 60l-8.66-5V45L30 40zM0 20l8.66 5v10L0 40l-8.66-5V25L0 20zm60 0l8.66 5v10L60 40l-8.66-5V25L60 20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* ── Glow utilities ── */
+  .glow-gold {
+    box-shadow: var(--shadow-gold);
+  }
+  .glow-gold-sm {
+    box-shadow: 0 0 10px rgba(245, 158, 11, 0.15);
+  }
+
+  /* ── Glass card ── */
+  .glass {
+    background-color: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-base);
+  }
+
+  /* ── Active verse ── */
+  .verse-active {
+    background: linear-gradient(
+      135deg,
+      rgba(120, 53, 15, 0.25) 0%,
+      rgba(120, 60, 10, 0.15) 100%
+    );
+    border-color: rgba(245, 158, 11, 0.35) !important;
+    box-shadow:
+      inset 0 0 30px rgba(245, 158, 11, 0.04),
+      0 0 20px rgba(245, 158, 11, 0.06);
+  }
+  .light .verse-active {
+    background: linear-gradient(
+      135deg,
+      rgba(254, 243, 199, 0.8) 0%,
+      rgba(253, 230, 138, 0.4) 100%
+    );
+    border-color: rgba(217, 119, 6, 0.4) !important;
+    box-shadow:
+      inset 0 0 20px rgba(217, 119, 6, 0.04),
+      0 2px 12px rgba(217, 119, 6, 0.08);
+  }
+
+  /* ── Verse number badge ── */
+  .verse-badge {
+    @apply inline-flex items-center justify-center w-10 h-10 rounded-full flex-shrink-0;
+    @apply text-sm font-bold font-oleo;
+    background: linear-gradient(
+      135deg,
+      rgba(245, 158, 11, 0.15),
+      rgba(234, 88, 12, 0.1)
+    );
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    color: theme("colors.amber.400");
+  }
+  .light .verse-badge {
+    background: linear-gradient(
+      135deg,
+      rgba(245, 158, 11, 0.12),
+      rgba(234, 88, 12, 0.08)
+    );
+    border-color: rgba(217, 119, 6, 0.3);
+    color: theme("colors.amber.600");
+  }
+
+  /* ── Arabic text ── */
+  .arabic-text {
+    direction: rtl;
+    font-family: "LPMQ Isep Misbah", "Scheherazade New", serif;
+    line-height: 2.4;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── Ornament line ── */
+  .ornament-line {
+    @apply relative flex items-center gap-4;
+  }
+  .ornament-line::before,
+  .ornament-line::after {
+    content: "";
+    @apply flex-1 h-px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(245, 158, 11, 0.35),
+      transparent
+    );
+  }
+  .light .ornament-line::before,
+  .light .ornament-line::after {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(217, 119, 6, 0.4),
+      transparent
+    );
+  }
+
+  /* ── Custom scrollbar ── */
+  .scrollbar-gold {
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  }
+  .scrollbar-gold::-webkit-scrollbar {
+    width: 4px;
+  }
+  .scrollbar-gold::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+  .scrollbar-gold::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #f59e0b, #d97706);
+    border-radius: 100px;
+  }
+
+  /* ── Card base ── */
+  .card-base {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-base);
+    box-shadow: var(--shadow-card);
+  }
+
+  /* ── Pulse animation for playing verse ── */
+  @keyframes pulseGold {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.2);
+    }
+    50% {
+      box-shadow: 0 0 0 8px rgba(245, 158, 11, 0);
+    }
+  }
+  .pulse-gold {
+    animation: pulseGold 2s ease-in-out infinite;
+  }
+
+  /* ── Animations ── */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .animate-fade-in-up {
+    animation: fadeInUp 0.5s ease forwards;
+  }
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  /* ── Settings panel slide ── */
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  @keyframes slideOutRight {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+
+  /* ── Page transitions ── */
+  .page-enter-active,
+  .page-leave-active {
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+  .page-enter-from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  .page-leave-to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  .layout-enter-active,
+  .layout-leave-active {
+    transition: opacity 0.15s ease;
+  }
+  .layout-enter-from,
+  .layout-leave-to {
+    opacity: 0;
+  }
+}
